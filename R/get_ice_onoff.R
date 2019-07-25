@@ -35,15 +35,15 @@ get_ice_onoff = function(ice, wtr){
 		ice_runs = rle2(as.numeric(after_ice > 0), indices=TRUE)
 		
 		#ice on is encoded as a run value of 1
-		ice_only = ice_runs[ice_runs[,'values'] == 1, ,drop=FALSE]
+		ice_only = ice_runs[ice_runs[,'value'] == 1, ,drop=FALSE]
 		
 		if(nrow(ice_only) == 0){
 			ice_onoff$on[i] = NA
 		}else{
 			#grab the longest ice run to use for on/off dates 
-			longest_ice = ice_only[which.max(ice_only[,'lengths']), , drop=FALSE]
+			longest_ice = ice_only[which.max(ice_only[,'length']), , drop=FALSE]
 			
-			ice_onoff$on[i] = ice[ice$DateTime >= peak_date & ice$DateTime <= peak_plus_365, ]$DateTime[longest_ice[,'starts']]
+			ice_onoff$on[i] = ice[ice$DateTime >= peak_date & ice$DateTime <= peak_plus_365, ]$DateTime[longest_ice[,'start']]
 		}
 		
 		
@@ -54,14 +54,14 @@ get_ice_onoff = function(ice, wtr){
 		ice_runs = rle2(as.numeric(before_ice > 0), indices=TRUE)
 		
 		#ice on is encoded as a run value of 1
-		ice_only = ice_runs[ice_runs[,'values'] == 1, ,drop=FALSE]
+		ice_only = ice_runs[ice_runs[,'value'] == 1, ,drop=FALSE]
 		
 		if(nrow(ice_only) == 0){
 			ice_onoff$off[i] = NA
 		}else{
-			longest_ice = ice_only[which.max(ice_only[,'lengths']), , drop=FALSE]
+			longest_ice = ice_only[which.max(ice_only[,'length']), , drop=FALSE]
 			
-			ice_onoff$off[i] = ice[ice$DateTime >= peak_minus_365 & ice$DateTime <= peak_date, ]$DateTime[longest_ice[,'stops']]
+			ice_onoff$off[i] = ice[ice$DateTime >= peak_minus_365 & ice$DateTime <= peak_date, ]$DateTime[longest_ice[,'stop']]
 		}
 	}
 	# add this to indicate information origin
